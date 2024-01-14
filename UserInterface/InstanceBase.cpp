@@ -1929,10 +1929,14 @@ void CInstanceBase::Update()
 	MovementProcess();
 
 	m_GraphicThingInstance.MotionProcess(IsPC());
+
 	if (IsMountingHorse())
 	{
 		m_kHorse.m_pkActor->HORSE_MotionProcess(FALSE);
 	}
+
+	if (IsAffect(AFFECT_INVISIBILITY) || IsAffect(AFFECT_EUNHYEONG))
+		m_GraphicThingInstance.HideAllAttachingEffect();
 
 	__ComboProcess();	
 	
@@ -1995,18 +1999,6 @@ void CInstanceBase::Render()
 
 	m_kHorse.Render();
 	m_GraphicThingInstance.Render();
-
-	auto& rkChrMgr = CPythonCharacterManager::Instance();
-
-	for (auto ptr = rkChrMgr.CharacterInstanceBegin(); ptr != rkChrMgr.CharacterInstanceEnd(); ++ptr)
-	{
-		CInstanceBase* pkInstEach = *ptr;
-
-		if (pkInstEach && (pkInstEach->IsAffect(AFFECT_EUNHYEONG) || pkInstEach->IsAffect(AFFECT_INVISIBILITY)) && !CPythonPlayer::Instance().IsMainCharacterIndex(pkInstEach->GetVirtualID()))
-		{
-			pkInstEach->m_GraphicThingInstance.HideAllAttachingEffect();
-		}
-	}
 	
 	if (CActorInstance::IsDirLine())
 	{	

@@ -874,7 +874,6 @@ void CInstanceBase::__Shaman_SetParalysis(bool isParalysis)
 }
 
 
-
 void CInstanceBase::__Warrior_SetGeomgyeongAffect(bool isVisible)
 {
 	if (isVisible)
