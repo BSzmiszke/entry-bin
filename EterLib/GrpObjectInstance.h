@@ -57,6 +57,9 @@ class CGraphicObjectInstance : public CGraphicCollisionObject
 		void					Hide();
 		bool					isShow();
 
+		void ActivatePermanentInvisibility();
+		void DeactivatePermanentInvisibility();
+
 		// Camera Block
 		void					BlockCamera(bool bBlock) {m_BlockCamera = bBlock;}
 		bool					BlockCamera() { return m_BlockCamera; }
@@ -109,6 +112,7 @@ class CGraphicObjectInstance : public CGraphicCollisionObject
 		D3DXMATRIX				m_mRotation;
 
 		bool					m_isVisible;
+		bool					m_isAlwaysHidden;
 		D3DXMATRIX				m_worldMatrix;
 
 		// Camera Block

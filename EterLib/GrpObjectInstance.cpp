@@ -200,14 +200,21 @@ void CGraphicObjectInstance::Hide()
 {
 	m_isVisible = false;
 }
-bool CGraphicObjectInstance::isShow()
+
+void CGraphicObjectInstance::ActivatePermanentInvisibility()
 {
-	return m_isVisible;
+	m_isAlwaysHidden = true;
 }
 
-// 
+void CGraphicObjectInstance::DeactivatePermanentInvisibility()
+{
+	m_isAlwaysHidden = false;
+}
 
-//////////////////////////////////////////////////////////////////////////
+bool CGraphicObjectInstance::isShow()
+{
+	return m_isVisible && !m_isAlwaysHidden;
+}
 
 D3DXVECTOR4 & CGraphicObjectInstance::GetWTBBoxVertex(const unsigned char & c_rucNumTBBoxVertex)
 {
@@ -276,6 +283,7 @@ void CGraphicObjectInstance::Initialize()
 	m_isVisible = TRUE;	
 
 	m_BlockCamera = false;
+	m_isAlwaysHidden = false;
 	
 	m_v3Position.x = m_v3Position.y = m_v3Position.z = 0.0f;
 	m_v3Scale.x = m_v3Scale.y = m_v3Scale.z = 0.0f;

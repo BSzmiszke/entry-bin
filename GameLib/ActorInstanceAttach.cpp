@@ -580,6 +580,7 @@ void CActorInstance::ShowAllAttachingEffect()
 	{
 		CEffectManager::Instance().SelectEffectInstance(it->dwEffectIndex);
 		CEffectManager::Instance().ShowEffect();
+		CEffectManager::Instance().DeactivatePermanentInvisibility();
 	}
 }
 
@@ -590,6 +591,7 @@ void CActorInstance::HideAllAttachingEffect()
 	{
 		CEffectManager::Instance().SelectEffectInstance(it->dwEffectIndex);
 		CEffectManager::Instance().HideEffect();
+		CEffectManager::Instance().ActivatePermanentInvisibility();
 	}
 }
 

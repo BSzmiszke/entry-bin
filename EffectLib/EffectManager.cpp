@@ -3,8 +3,6 @@
 #include "../eterlib/StateManager.h"
 #include "EffectManager.h"
 
-
-
 void CEffectManager::GetInfo(std::string* pstInfo)
 {
 	char szInfo[256];
@@ -355,6 +353,27 @@ void CEffectManager::HideEffect()
 		return;
 
 	m_pSelectedEffectInstance->Hide();
+}
+
+void CEffectManager::ActivatePermanentInvisibility()
+{
+	if (!m_pSelectedEffectInstance)
+	{
+		return;
+	}
+
+	m_pSelectedEffectInstance->ActivatePermanentInvisibility();
+}
+
+
+void CEffectManager::DeactivatePermanentInvisibility()
+{
+	if (!m_pSelectedEffectInstance)
+	{
+		return;
+	}
+
+	m_pSelectedEffectInstance->DeactivatePermanentInvisibility();
 }
 
 bool CEffectManager::GetEffectData(DWORD dwID, CEffectData ** ppEffect)

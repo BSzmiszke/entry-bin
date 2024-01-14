@@ -56,6 +56,9 @@ class CEffectManager : public CScreen, public CSingleton<CEffectManager>
 		void ShowEffect();
 		void HideEffect();
 
+		void ActivatePermanentInvisibility();
+		void DeactivatePermanentInvisibility();
+
 		// Temporary function
 		DWORD GetRandomEffect();
 		int GetEmptyIndex();

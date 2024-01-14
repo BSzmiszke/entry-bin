@@ -1820,7 +1820,7 @@ void CInstanceBase::MovementProcess()
 			m_GraphicThingInstance.SetRotation(fRotation);
 		}
 
-		if (__IsInDustRange())
+		if (__IsInDustRange() && !IsAffect(AFFECT_EUNHYEONG))
 		{ 
 			float fDustDistance = NEW_GetDistanceFromDestPixelPosition(m_kPPosDust);
 			if (IsMountingHorse())
