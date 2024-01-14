@@ -272,8 +272,9 @@ void CEffectInstance::__Initialize()
 	m_v3BoundingSpherePosition.x = m_v3BoundingSpherePosition.y = m_v3BoundingSpherePosition.z = 0.0f;
 
 	m_pkEftData=NULL;
-
 	D3DXMatrixIdentity(&m_matGlobal);
+
+	DeactivatePermanentInvisibility();
 }
 
 CEffectInstance::CEffectInstance() 

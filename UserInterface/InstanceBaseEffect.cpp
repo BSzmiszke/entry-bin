@@ -908,77 +908,44 @@ void CInstanceBase::__SetAffect(UINT eAffect, bool isVisible)
 			if (IsAffect(AFFECT_INVISIBILITY))
 				return;
 			break;
-/*
-		case AFFECT_GWIGEOM: // 전기 속성 공격으로 바뀔 예정
-			if (isVisible)
-			{
-				m_GraphicThingInstance.SetBattleHitEffect(ms_adwCRCAffectEffect[EFFECT_ELECTRIC_HIT]);
-				m_GraphicThingInstance.SetBattleAttachEffect(ms_adwCRCAffectEffect[EFFECT_ELECTRIC_ATTACH]);
-			}
-			else
-			{
-				m_GraphicThingInstance.SetBattleHitEffect(ms_adwCRCAffectEffect[EFFECT_HIT]);
-				m_GraphicThingInstance.SetBattleAttachEffect(0);
-			}
-			return;
-			break;
-		case AFFECT_HWAYEOM: // 화염 속성 공격으로 바뀔 예정
-			if (isVisible)
-			{
-				m_GraphicThingInstance.SetBattleHitEffect(ms_adwCRCAffectEffect[EFFECT_FLAME_HIT]);
-				m_GraphicThingInstance.SetBattleAttachEffect(ms_adwCRCAffectEffect[EFFECT_FLAME_ATTACH]);
-			}
-			else
-			{
-				m_GraphicThingInstance.SetBattleHitEffect(ms_adwCRCAffectEffect[EFFECT_HIT]);
-				m_GraphicThingInstance.SetBattleAttachEffect(0);
-			}
-			// 화염참은 공격할 때만 일시적으로 Visible 합니다.
-			return;
-			break;
-*/
+
 		case AFFECT_CHEONGEUN:
 			m_GraphicThingInstance.SetResistFallen(isVisible);
 			break;
+
 		case AFFECT_GEOMGYEONG:
 			__Warrior_SetGeomgyeongAffect(isVisible);
 			return;
 			break;
+
 		case AFFECT_REVIVE_INVISIBILITY:
 			__Assassin_SetEunhyeongAffect(isVisible);
 			break;
+
 		case AFFECT_EUNHYEONG:
 			__Assassin_SetEunhyeongAffect(isVisible);
 			break;
+
 		case AFFECT_GYEONGGONG:
 		case AFFECT_KWAESOK:
-			// 경공술, 쾌속은 뛸때만 Attaching 시킵니다. - [levites]
 			if (isVisible)
 				if (!IsWalking())
 					return;
 			break;
+
 		case AFFECT_INVISIBILITY:
-			// 2004.07.17.levites.isShow를 ViewFrustumCheck로 변경
 			if (isVisible)
 			{
-				m_GraphicThingInstance.ClearAttachingEffect();
-				__EffectContainer_Destroy();
-				DetachTextTail();
+				m_GraphicThingInstance.HideAllAttachingEffect();
 			}
 			else
 			{
 				m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
-				AttachTextTail();
-				RefreshTextTail();
+				m_GraphicThingInstance.ShowAllAttachingEffect();
 			}
 			return;
 			break;
-//		case AFFECT_FAINT:
-//			m_GraphicThingInstance.SetFaint(isVisible);
-//			break;
-//		case AFFECT_SLEEP:
-//			m_GraphicThingInstance.SetSleep(isVisible);
-//			break;
+
 		case AFFECT_STUN:
 			m_GraphicThingInstance.SetSleep(isVisible);
 			break;

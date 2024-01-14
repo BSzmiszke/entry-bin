@@ -449,7 +449,7 @@ BOOL CInstanceBase::IsMovieMode()
 
 BOOL CInstanceBase::IsInvisibility()
 {
-	if (IsAffect(AFFECT_INVISIBILITY))
+	if (IsAffect(AFFECT_INVISIBILITY) || IsAffect(AFFECT_EUNHYEONG))
 		return true;
 
 	return false;
@@ -1596,7 +1596,6 @@ void CInstanceBase::StateProcess()
 	}
 }
 
-
 void CInstanceBase::MovementProcess()
 {
 	TPixelPosition kPPosCur;
@@ -1986,9 +1985,6 @@ void CInstanceBase::RenderTrace()
 	m_GraphicThingInstance.RenderTrace();
 }
 
-
-
-
 void CInstanceBase::Render()
 {
 	// 2004.07.17.levites.isShow를 ViewFrustumCheck로 변경
@@ -1998,7 +1994,19 @@ void CInstanceBase::Render()
 	++ms_dwRenderCounter;
 
 	m_kHorse.Render();
-	m_GraphicThingInstance.Render();	
+	m_GraphicThingInstance.Render();
+
+	auto& rkChrMgr = CPythonCharacterManager::Instance();
+
+	for (auto ptr = rkChrMgr.CharacterInstanceBegin(); ptr != rkChrMgr.CharacterInstanceEnd(); ++ptr)
+	{
+		CInstanceBase* pkInstEach = *ptr;
+
+		if (pkInstEach && (pkInstEach->IsAffect(AFFECT_EUNHYEONG) || pkInstEach->IsAffect(AFFECT_INVISIBILITY)) && !CPythonPlayer::Instance().IsMainCharacterIndex(pkInstEach->GetVirtualID()))
+		{
+			pkInstEach->m_GraphicThingInstance.HideAllAttachingEffect();
+		}
+	}
 	
 	if (CActorInstance::IsDirLine())
 	{	
