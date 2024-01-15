@@ -787,7 +787,6 @@ class CInstanceBase
 		/////////////////////////////////////////////////////////////
 		void __ClearAffectFlagContainer();
 		void __ClearAffects();
-		int	HasAffect(DWORD dwIndex);
 		/////////////////////////////////////////////////////////////
 
 		void __SetAffect(UINT eAffect, bool isVisible);
