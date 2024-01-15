@@ -1935,9 +1935,6 @@ void CInstanceBase::Update()
 		m_kHorse.m_pkActor->HORSE_MotionProcess(FALSE);
 	}
 
-	if (IsAffect(AFFECT_INVISIBILITY) || IsAffect(AFFECT_EUNHYEONG))
-		m_GraphicThingInstance.HideAllAttachingEffect();
-
 	__ComboProcess();	
 	
 	while (ProcessDamage());
@@ -1948,7 +1945,6 @@ void CInstanceBase::Transform()
 {
 	if (__IsSyncing())
 	{
-		//OnSyncing();
 	}
 	else
 	{

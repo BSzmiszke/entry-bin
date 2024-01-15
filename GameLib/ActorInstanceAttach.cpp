@@ -573,6 +573,15 @@ void CActorInstance::UpdateAttachingInstances()
 	}
 }
 
+void CActorInstance::SetDeactiveAllAttachingEffect()
+{
+	std::list<TAttachingEffect>::iterator it;
+	for (it = m_AttachingEffectList.begin(); it != m_AttachingEffectList.end(); ++it)
+	{
+		CEffectManager::Instance().DeactiveEffectInstance(it->dwEffectIndex);
+	}
+}
+
 void CActorInstance::ShowAllAttachingEffect()
 {
 	std::list<TAttachingEffect>::iterator it;
@@ -586,10 +595,9 @@ void CActorInstance::ShowAllAttachingEffect()
 
 void CActorInstance::HideAllAttachingEffect()
 {
-	std::list<TAttachingEffect>::iterator it;
-	for(it = m_AttachingEffectList.begin(); it!= m_AttachingEffectList.end();++it)
+	for (auto& effect : m_AttachingEffectList)
 	{
-		CEffectManager::Instance().SelectEffectInstance(it->dwEffectIndex);
+		CEffectManager::Instance().SelectEffectInstance(effect.dwEffectIndex);
 		CEffectManager::Instance().HideEffect();
 		CEffectManager::Instance().ActivatePermanentInvisibility();
 	}
