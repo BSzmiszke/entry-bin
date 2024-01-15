@@ -520,8 +520,14 @@ BOOL CInstanceBase::CheckAdvancing()
 		//NOTE : Skil을 쓰더라도 Door Type과는 Collision체크 한다.
 		if( bUsingSkill && !rkActorEach.IsDoor() )
 			continue;
-			
-		// 앞으로 전진할수 있는가?
+
+		auto pCharacter = CPythonCharacterManager::Instance().GetInstancePtr(rkActorEach.GetVirtualID());
+
+		if (pCharacter && (pCharacter->IsAffect(AFFECT_INVISIBILITY) || pCharacter->IsAffect(AFFECT_EUNHYEONG))) 
+		{
+			continue;
+		}
+
 		if (rkActorSelf.TestActorCollision(rkActorEach))
 		{
 			uCollisionCount++;

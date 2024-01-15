@@ -763,6 +763,14 @@ void CInstanceBase::__ClearAffects()
 	m_GraphicThingInstance.__OnClearAffects();
 }
 
+int CInstanceBase::HasAffect(DWORD dwIndex)
+{
+	if (dwIndex >= AFFECT_NUM)
+		return 0;
+
+	return m_adwCRCAffectEffect[dwIndex];
+}
+
 /////////////////////////////////////////////////
 
 void CInstanceBase::__SetNormalAffectFlagContainer(const CAffectFlagContainer& c_rkAffectFlagContainer)
