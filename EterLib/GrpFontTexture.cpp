@@ -253,7 +253,7 @@ CGraphicFontTexture::TCharacterInfomation* CGraphicFontTexture::UpdateCharacterI
 		}
 	}
 
-	TextOutW(hDC, m_x + 1, m_y, &keyValue, 1);
+	TextOutW(hDC, m_x, m_y, &keyValue, 1);
 		
 	int nChrX;
 	int nChrY;

@@ -494,7 +494,6 @@ class CActorInstance : public IActorInstance, public IFlyTargetableObject
 		void		UpdateAttribute();
 		bool		IntersectDefendingSphere();
 		float		GetHeight();
-		void		SetDeactiveAllAttachingEffect();
 		void		ShowAllAttachingEffect();
 		void		HideAllAttachingEffect();
 		void		ClearAttachingEffect();

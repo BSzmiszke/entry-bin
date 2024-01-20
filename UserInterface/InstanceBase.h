@@ -792,6 +792,7 @@ class CInstanceBase
 		void __SetAffect(UINT eAffect, bool isVisible);
 		
 		void SetAffectFlagContainer(const CAffectFlagContainer& c_rkAffectFlagContainer);
+		void UpdateAttachingEffectVisibility(const CAffectFlagContainer& c_rkAffectFlagContainer);
 
 		void __SetNormalAffectFlagContainer(const CAffectFlagContainer& c_rkAffectFlagContainer);		
 		void __SetStoneSmokeFlagContainer(const CAffectFlagContainer& c_rkAffectFlagContainer);

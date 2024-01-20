@@ -449,8 +449,10 @@ BOOL CInstanceBase::IsMovieMode()
 
 BOOL CInstanceBase::IsInvisibility()
 {
-	if (IsAffect(AFFECT_INVISIBILITY) || IsAffect(AFFECT_EUNHYEONG))
+	if ((IsAffect(AFFECT_INVISIBILITY) || IsAffect(AFFECT_EUNHYEONG) || IsAffect(AFFECT_REVIVE_INVISIBILITY)))
+	{
 		return true;
+	}
 
 	return false;
 }
@@ -1596,6 +1598,7 @@ void CInstanceBase::StateProcess()
 	}
 }
 
+
 void CInstanceBase::MovementProcess()
 {
 	TPixelPosition kPPosCur;
@@ -1929,11 +1932,11 @@ void CInstanceBase::Update()
 	MovementProcess();
 
 	m_GraphicThingInstance.MotionProcess(IsPC());
-
 	if (IsMountingHorse())
 	{
 		m_kHorse.m_pkActor->HORSE_MotionProcess(FALSE);
 	}
+
 
 	__ComboProcess();	
 	
@@ -1945,6 +1948,7 @@ void CInstanceBase::Transform()
 {
 	if (__IsSyncing())
 	{
+		//OnSyncing();
 	}
 	else
 	{
@@ -1985,6 +1989,9 @@ void CInstanceBase::RenderTrace()
 	m_GraphicThingInstance.RenderTrace();
 }
 
+
+
+
 void CInstanceBase::Render()
 {
 	// 2004.07.17.levites.isShow를 ViewFrustumCheck로 변경
@@ -1994,7 +2001,7 @@ void CInstanceBase::Render()
 	++ms_dwRenderCounter;
 
 	m_kHorse.Render();
-	m_GraphicThingInstance.Render();
+	m_GraphicThingInstance.Render();	
 	
 	if (CActorInstance::IsDirLine())
 	{	

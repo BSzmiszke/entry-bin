@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "InstanceBase.h"
 #include "PythonTextTail.h"
 #include "AbstractApplication.h"
@@ -153,7 +153,7 @@ bool CInstanceBase::ProcessDamage()
 		{
 			strDamageType = "nontarget_";
 			rdwCRCEft = EFFECT_DAMAGE_NOT_TARGET;
-			return true;//ÇöÀç Àû¿ë ¾ÈµÊ.
+			return true;//Ã‡Ã¶Å”Ã§ Å”Å±Å¼Ã« Ä¾ÄŒÂµÄ˜.
 		}
 		else
 		{
@@ -169,7 +169,7 @@ bool CInstanceBase::ProcessDamage()
 	{
 		if(index > 7)
 		{
-			TraceError("ProcessDamage¹«ÇÑ·çÇÁ °¡´É¼º");
+			TraceError("ProcessDamageÄ…Â«Ã‡ÅƒÂ·Ã§Ã‡Ã Â°Ë‡Â´Ã‰Ä½ÅŸ");
 			return false;
 		}
 		num = damage%10;
@@ -250,33 +250,28 @@ CInstanceBase::SEffectContainer::Dict& CInstanceBase::__EffectContainer_GetDict(
 	return m_kEffectContainer.m_kDct_dwEftID;
 }
 
-DWORD CInstanceBase::__EffectContainer_AttachEffect(DWORD effectKey)
+DWORD CInstanceBase::__EffectContainer_AttachEffect(DWORD dwEftKey)
 {
-	SEffectContainer::Dict& effectDictionary = __EffectContainer_GetDict();
+	SEffectContainer::Dict& rkDctEftID = __EffectContainer_GetDict();
+	SEffectContainer::Dict::iterator f = rkDctEftID.find(dwEftKey);
+	if (rkDctEftID.end() != f)
+		return 0;
 
-	auto [iterator, inserted] = effectDictionary.emplace(effectKey, 0);
-	if (!inserted)
-	{
-		return iterator->second; // Jeœli efekt ju¿ istnieje, zwraca jego ID.
-	}
-
-	DWORD effectID = __AttachEffect(effectKey);
-	iterator->second = effectID; // Ustawia ID dla nowo dodanego efektu.
-	return effectID;
+	DWORD dwEftID = __AttachEffect(dwEftKey);
+	rkDctEftID.insert(SEffectContainer::Dict::value_type(dwEftKey, dwEftID));
+	return dwEftID;
 }
 
-
-void CInstanceBase::__EffectContainer_DetachEffect(DWORD effectKey)
+void CInstanceBase::__EffectContainer_DetachEffect(DWORD dwEftKey)
 {
-	SEffectContainer::Dict& effectDictionary = __EffectContainer_GetDict();
+	SEffectContainer::Dict& rkDctEftID = __EffectContainer_GetDict();
+	SEffectContainer::Dict::iterator f = rkDctEftID.find(dwEftKey);
+	if (rkDctEftID.end() == f)
+		return;
 
-	auto it = effectDictionary.find(effectKey);
-	if (it == effectDictionary.end())
-		return; // Efekt nie zosta³ znaleziony, wiêc nic nie robimy.
+	__DetachEffect(f->second);
 
-	__DetachEffect(it->second); // Od³¹czanie efektu.
-
-	effectDictionary.erase(it); // Usuniêcie efektu z s³ownika.
+	rkDctEftID.erase(f);
 }
 
 
@@ -335,7 +330,6 @@ void CInstanceBase::__DetachTargetEffect()
 {
 	__EffectContainer_DetachEffect(EFFECT_TARGET);
 }
-
 
 void CInstanceBase::__StoneSmoke_Inialize()
 {
@@ -477,7 +471,7 @@ bool CInstanceBase::__FindPVPReadyKey(DWORD dwVIDSrc, DWORD dwVIDDst)
 
 	return true;
 }
-//±æµåÀü½Ã »ó´ë ±æµåÀÎÁö È®ÀÎÇÒ¶§.
+//Â±Ä‡ÂµÄºÅ”Ã¼ËÄ‚ Â»Ã³Â´Ã« Â±Ä‡ÂµÄºÅ”ÃÃÃ¶ ÄŒÂ®Å”ÃÃ‡Å‡Â¶Â§.
 bool CInstanceBase::__FindGVGKey(DWORD dwSrcGuildID, DWORD dwDstGuildID)
 {
 	DWORD dwGVGKey=__GetPVPKey(dwSrcGuildID, dwDstGuildID);
@@ -487,7 +481,7 @@ bool CInstanceBase::__FindGVGKey(DWORD dwSrcGuildID, DWORD dwDstGuildID)
 
 	return true;
 }
-//´ë·Ã ¸ğµå¿¡¼­´Â ´ë·Ã »ó´ë¸¸ °ø°İÇÒ ¼ö ÀÖ´Ù.
+//Â´Ã«Â·Ä‚ Â¸Ä‘ÂµÄºÅ¼Ë‡Ä½Â­Â´Ã‚ Â´Ã«Â·Ä‚ Â»Ã³Â´Ã«Â¸Â¸ Â°Å™Â°ÃÃ‡Å‡ Ä½Ã¶ Å”Ã–Â´Å®.
 bool CInstanceBase::__FindDUELKey(DWORD dwVIDSrc, DWORD dwVIDDst)
 {
 	DWORD dwDUELKey=__GetPVPKey(dwVIDSrc, dwVIDDst);
@@ -506,7 +500,7 @@ bool CInstanceBase::IsPVPInstance(CInstanceBase& rkInstSel)
 	DWORD dwGuildIDSrc=GetGuildID();
 	DWORD dwGuildIDDst=rkInstSel.GetGuildID();
 
-	if (GetDuelMode())	//´ë·Ã ¸ğµåÀÏ¶§´Â ~_~
+	if (GetDuelMode())	//Â´Ã«Â·Ä‚ Â¸Ä‘ÂµÄºÅ”ÄÂ¶Â§Â´Ã‚ ~_~
 		return true;	
 
 	return __FindPVPKey(dwVIDSrc, dwVIDDst) || __FindGVGKey(dwGuildIDSrc, dwGuildIDDst);
@@ -736,7 +730,7 @@ void CInstanceBase::RefreshTextTailTitle()
 	RefreshTextTail();
 }
 
-// 2004.07.25.myevan.ÀÌÆåÆ® ¾È ºÙ´Â ¹®Á¦ ÇØ°á
+// 2004.07.25.myevan.Å”ÄšÄ†ÄºÄ†Â® Ä¾ÄŒ ÅŸÅ®Â´Ã‚ Ä…Â®ÃÂ¦ Ã‡Å˜Â°Ã¡
 /////////////////////////////////////////////////
 void CInstanceBase::__ClearAffectFlagContainer()
 {
@@ -767,10 +761,10 @@ void CInstanceBase::__ClearAffects()
 
 void CInstanceBase::__SetNormalAffectFlagContainer(const CAffectFlagContainer& c_rkAffectFlagContainer)
 {
-	for (int i=0; i<CAffectFlagContainer::BIT_SIZE; ++i)
+	for (int i = 0; i < CAffectFlagContainer::BIT_SIZE; ++i)
 	{
-		bool isOldSet=m_kAffectFlagContainer.IsSet(i);
-		bool isNewSet=c_rkAffectFlagContainer.IsSet(i);
+		bool isOldSet = m_kAffectFlagContainer.IsSet(i);
+		bool isNewSet = c_rkAffectFlagContainer.IsSet(i);
 
 		if (isOldSet != isNewSet)
 		{
@@ -817,9 +811,24 @@ void CInstanceBase::SetAffectFlagContainer(const CAffectFlagContainer& c_rkAffec
 	else
 	{
 		__SetNormalAffectFlagContainer(c_rkAffectFlagContainer);
+		UpdateAttachingEffectVisibility(c_rkAffectFlagContainer);
 	}
 }
 
+void CInstanceBase::UpdateAttachingEffectVisibility(const CAffectFlagContainer& c_rkAffectFlagContainer)
+{
+	if (c_rkAffectFlagContainer.IsSet(AFFECT_REVIVE_INVISIBILITY) || c_rkAffectFlagContainer.IsSet(AFFECT_EUNHYEONG))
+	{
+		if (__IsMainInstance())
+		{
+			m_GraphicThingInstance.ShowAllAttachingEffect();
+		}
+		else
+		{
+			m_GraphicThingInstance.HideAllAttachingEffect();
+		}
+	}
+}
 
 void CInstanceBase::SCRIPT_SetAffect(UINT eAffect, bool isVisible)
 {
@@ -830,25 +839,10 @@ void CInstanceBase::__SetReviveInvisibilityAffect(bool isVisible)
 {
 	if (isVisible)
 	{
-		// NOTE : Dress ¸¦ ÀÔ°í ÀÖÀ¸¸é Alpha ¸¦ ³ÖÁö ¾Ê´Â´Ù.
 		if (IsWearingDress())
+		{
 			return;
-
-		m_GraphicThingInstance.BlendAlphaValue(0.5f, 1.0f);
-	}
-	else
-	{
-		m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);	
-	}
-}
-
-void CInstanceBase::__Assassin_SetEunhyeongAffect(bool isVisible)
-{
-	if (isVisible)
-	{
-		// NOTE : Dress ¸¦ ÀÔ°í ÀÖÀ¸¸é Alpha ¸¦ ³ÖÁö ¾Ê´Â´Ù.
-		if (IsWearingDress())
-			return;
+		}
 
 		if (__IsMainInstance() || __MainCanSeeHiddenThing())
 		{
@@ -856,14 +850,43 @@ void CInstanceBase::__Assassin_SetEunhyeongAffect(bool isVisible)
 		}
 		else
 		{
-			// 2004.10.16.myevan.ÀºÇü¹ı ¿ÏÀü Åõ¸í
+			m_GraphicThingInstance.BlendAlphaValue(0.0f, 1.0f);
+
+		}
+	}
+	else
+	{
+		if (!IsAffect(AFFECT_EUNHYEONG))
+		{
+			m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
+			m_GraphicThingInstance.ShowAllAttachingEffect();
+		}
+	}
+}
+
+void CInstanceBase::__Assassin_SetEunhyeongAffect(bool isVisible)
+{
+	if (isVisible)
+	{
+		if (IsWearingDress())
+		{
+			return;
+		}
+
+		if (__IsMainInstance() || __MainCanSeeHiddenThing())
+		{
+			m_GraphicThingInstance.BlendAlphaValue(0.5f, 1.0f);
+		}
+		else
+		{
 			m_GraphicThingInstance.BlendAlphaValue(0.0f, 1.0f);
 			m_GraphicThingInstance.HideAllAttachingEffect();
 		}
 	}
 	else
 	{
-		m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);	
+
+		m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
 		m_GraphicThingInstance.ShowAllAttachingEffect();
 	}
 }
@@ -872,7 +895,6 @@ void CInstanceBase::__Shaman_SetParalysis(bool isParalysis)
 {
 	m_GraphicThingInstance.SetParalysis(isParalysis);
 }
-
 
 void CInstanceBase::__Warrior_SetGeomgyeongAffect(bool isVisible)
 {
@@ -911,20 +933,16 @@ void CInstanceBase::__SetAffect(UINT eAffect, bool isVisible)
 		case AFFECT_CHEONGEUN:
 			m_GraphicThingInstance.SetResistFallen(isVisible);
 			break;
-
 		case AFFECT_GEOMGYEONG:
 			__Warrior_SetGeomgyeongAffect(isVisible);
 			return;
 			break;
-
 		case AFFECT_REVIVE_INVISIBILITY:
-			__Assassin_SetEunhyeongAffect(isVisible);
+			__SetReviveInvisibilityAffect(isVisible);
 			break;
-
 		case AFFECT_EUNHYEONG:
 			__Assassin_SetEunhyeongAffect(isVisible);
 			break;
-
 		case AFFECT_GYEONGGONG:
 		case AFFECT_KWAESOK:
 			if (isVisible)
@@ -933,17 +951,23 @@ void CInstanceBase::__SetAffect(UINT eAffect, bool isVisible)
 			break;
 
 		case AFFECT_INVISIBILITY:
+		{
 			if (isVisible)
 			{
 				m_GraphicThingInstance.HideAllAttachingEffect();
+				__EffectContainer_Destroy();
+				DetachTextTail();
 			}
 			else
 			{
-				m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
 				m_GraphicThingInstance.ShowAllAttachingEffect();
+				m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
+				AttachTextTail();
+				RefreshTextTail();
 			}
-			return;
-			break;
+		}
+		return;
+		break;
 
 		case AFFECT_STUN:
 			m_GraphicThingInstance.SetSleep(isVisible);
@@ -1042,7 +1066,7 @@ void CInstanceBase::__DetachEffect(DWORD dwEID)
 
 DWORD CInstanceBase::__AttachEffect(UINT eEftType)
 {
-	// 2004.07.17.levites.isShow¸¦ ViewFrustumCheck·Î º¯°æ
+	// 2004.07.17.levites.isShowÂ¸Â¦ ViewFrustumCheckÂ·Ã ÅŸÅ»Â°Ä‡
 	if (IsAffect(AFFECT_INVISIBILITY))
 		return 0;
 
@@ -1057,8 +1081,8 @@ DWORD CInstanceBase::__AttachEffect(UINT eEftType)
 	{
 		std::string & rstrBoneName = ms_astAffectEffectAttachBone[eEftType];
 		const char * c_szBoneName;
-		// ¾ç¼Õ¿¡ ºÙÀÏ ¶§ »ç¿ëÇÑ´Ù.
-		// ÀÌ·± ½ÄÀÇ ¿¹¿Ü Ã³¸®¸¦ ÇØ³õÀº °ÍÀº Ä³¸¯ÅÍ ¸¶´Ù Equip ÀÇ Bone Name ÀÌ ´Ù¸£±â ¶§¹®.
+		// Ä¾Ã§Ä½ÅÅ¼Ë‡ ÅŸÅ®Å”Ä Â¶Â§ Â»Ã§Å¼Ã«Ã‡ÅƒÂ´Å®.
+		// Å”ÄšÂ·Â± ËÃ„Å”Ã‡ Å¼Ä…Å¼Ãœ Ä‚Å‚Â¸Â®Â¸Â¦ Ã‡Å˜Å‚Å‘Å”ÅŸ Â°ÃÅ”ÅŸ Ã„Å‚Â¸Å»Ä¹Ã Â¸Â¶Â´Å® Equip Å”Ã‡ Bone Name Å”Äš Â´Å®Â¸ÅÂ±Ã¢ Â¶Â§Ä…Â®.
 		if (0 == rstrBoneName.compare("PART_WEAPON"))
 		{
 			if (m_GraphicThingInstance.GetAttachingBoneName(CRaceData::PART_WEAPON, &c_szBoneName))
