@@ -86,15 +86,23 @@ const D3DXCOLOR& CInstanceBase::GetIndexedNameColor(UINT eNameColor)
 
 void CInstanceBase::AddDamageEffect(DWORD damage, BYTE flag, bool bSelf, bool bTarget)
 {
-    if (CPythonSystem::Instance().IsShowDamage())
-    {
-        SEffectDamage sDamage;
-        sDamage.bSelf = bSelf;
-        sDamage.bTarget = bTarget;
-        sDamage.damage = damage;
-        sDamage.flag = flag;
-        m_DamageQueue.push(sDamage);
-    }
+	if (IsAffect(AFFECT_EUNHYEONG) && (IsAffect(AFFECT_POISON) || IsAffect(AFFECT_FIRE)))
+	{
+		if (bTarget)
+		{
+			return;
+		}
+	}
+
+	if (CPythonSystem::Instance().IsShowDamage())
+	{
+		SEffectDamage sDamage;
+		sDamage.bSelf = bSelf;
+		sDamage.bTarget = bTarget;
+		sDamage.damage = damage;
+		sDamage.flag = flag;
+		m_DamageQueue.push(sDamage);
+	}
 }
 
 bool CInstanceBase::ProcessDamage()
@@ -954,16 +962,16 @@ void CInstanceBase::__SetAffect(UINT eAffect, bool isVisible)
 		{
 			if (isVisible)
 			{
-				m_GraphicThingInstance.HideAllAttachingEffect();
 				__EffectContainer_Destroy();
 				DetachTextTail();
+				m_GraphicThingInstance.HideAllAttachingEffect();
 			}
 			else
 			{
-				m_GraphicThingInstance.ShowAllAttachingEffect();
 				m_GraphicThingInstance.BlendAlphaValue(1.0f, 1.0f);
 				AttachTextTail();
 				RefreshTextTail();
+				m_GraphicThingInstance.ShowAllAttachingEffect();
 			}
 		}
 		return;
