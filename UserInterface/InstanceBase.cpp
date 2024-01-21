@@ -2229,9 +2229,12 @@ DWORD CInstanceBase::GetDuelMode()
 
 bool CInstanceBase::IsAttackableInstance(CInstanceBase& rkInstVictim)
 {	
-	if (PK_MODE_PROTECT == GetPKMode() || PK_MODE_PROTECT == rkInstVictim.GetPKMode())
+	if (IsPC() && rkInstVictim.IsPC())
 	{
-		return false;
+		if (PK_MODE_PROTECT == GetPKMode() || PK_MODE_PROTECT == rkInstVictim.GetPKMode())
+		{
+			return false;
+		}
 	}
 
 	if (__IsMainInstance())
