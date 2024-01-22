@@ -611,6 +611,7 @@ class CInstanceBase
 		BOOL					IsDead();
 		BOOL					IsStun();
 		BOOL					IsSleep();
+		bool					IsMining();
 		BOOL					__IsSyncing();
 		BOOL					IsWaiting();
 		BOOL					IsWalking();

@@ -1180,6 +1180,10 @@ BOOL CInstanceBase::IsSleep()
 	return m_GraphicThingInstance.IsSleep();
 }
 
+bool CInstanceBase::IsMining()
+{
+	return m_GraphicThingInstance.IsMining();
+}
 
 BOOL CInstanceBase::__IsSyncing()
 {
@@ -2235,6 +2239,11 @@ bool CInstanceBase::IsAttackableInstance(CInstanceBase& rkInstVictim)
 		{
 			return false;
 		}
+	}
+
+	if (rkInstVictim.IsMining())
+	{
+		return false;
 	}
 
 	if (__IsMainInstance())
