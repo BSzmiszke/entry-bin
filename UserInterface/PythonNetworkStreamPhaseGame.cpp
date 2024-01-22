@@ -4566,8 +4566,11 @@ bool CPythonNetworkStream::RecvLovePointUpdatePacket()
 bool CPythonNetworkStream::RecvDigMotionPacket()
 {
 	TPacketGCDigMotion kDigMotion;
+
 	if (!Recv(sizeof(kDigMotion), &kDigMotion))
+	{
 		return false;
+	}
 
 #ifdef _DEBUG
 	Tracef(" Dig Motion [%d/%d]\n", kDigMotion.vid, kDigMotion.count);
@@ -4577,19 +4580,20 @@ bool CPythonNetworkStream::RecvDigMotionPacket()
 	IAbstractCharacterManager& rkChrMgr = IAbstractCharacterManager::GetSingleton();
 	CInstanceBase* pkInstMain = rkChrMgr.GetInstancePtr(kDigMotion.vid);
 	CInstanceBase* pkInstTarget = rkChrMgr.GetInstancePtr(kDigMotion.target_vid);
-	if (!pkInstMain || !pkInstTarget)
-		return true;
 
-	// Look their way
+	if (!pkInstMain || !pkInstTarget)
+	{
+		return true;
+	}
+
 	pkInstMain->NEW_LookAtDestInstance(*pkInstTarget);
 
-	// Run the motion(s)
 	for (int32_t i = 0; i < kDigMotion.count; ++i)
+	{
 		pkInstMain->PushOnceMotion(CRaceMotionData::NAME_DIG);
+	}
 
-	// Start the mining!
 	pkInstMain->StartMining(kDigMotion.target_vid);
-
 	return true;
 }
 

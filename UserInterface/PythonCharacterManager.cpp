@@ -614,7 +614,8 @@ void CPythonCharacterManager::__DeleteBlendOutInstance(CInstanceBase* pkInstDel)
 	IAbstractPlayer& rkPlayer=IAbstractPlayer::GetSingleton();
 	rkPlayer.NotifyCharacterDead(pkInstDel->GetVirtualID());
 
-	if (m_pkInstMain && m_pkInstMain->IsMiningVID(pkInstDel->GetVirtualID())) {
+	if (m_pkInstMain && m_pkInstMain->IsMiningVID(pkInstDel->GetVirtualID())) 
+	{
 		m_pkInstMain->CancelMining();
 	}
 }

@@ -3198,6 +3198,11 @@ CInstanceBase::~CInstanceBase()
 	Destroy();
 }
 
+void CInstanceBase::GetBoundBox(D3DXVECTOR3 * vtMin, D3DXVECTOR3 * vtMax)
+{
+	m_GraphicThingInstance.GetBoundBox(vtMin, vtMax);
+}
+
 bool CInstanceBase::IsMiningVID(uint32_t vid)
 {
 	return m_dwMiningVID == vid && GetGraphicThingInstancePtr()->IsMining();
@@ -3212,9 +3217,3 @@ void CInstanceBase::CancelMining()
 {
 	GetGraphicThingInstancePtr()->InterceptLoopMotion(CRaceMotionData::NAME_WAIT);
 }
-
-void CInstanceBase::GetBoundBox(D3DXVECTOR3 * vtMin, D3DXVECTOR3 * vtMax)
-{
-	m_GraphicThingInstance.GetBoundBox(vtMin, vtMax);
-}
-
