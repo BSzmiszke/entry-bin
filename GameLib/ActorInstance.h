@@ -503,6 +503,9 @@ class CActorInstance : public IActorInstance, public IFlyTargetableObject
 		BOOL		IsFishing();
 		void		SetFishingPosition(D3DXVECTOR3 & rv3Position);
 
+		// Mining
+		bool		IsMining();
+
 	// Flying Methods
 		// As a Flying Target
 	public:

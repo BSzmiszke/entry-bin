@@ -463,6 +463,11 @@ BOOL CActorInstance::IsFishing()
 	return FALSE;
 }
 
+bool CActorInstance::IsMining()
+{
+	return m_pkCurRaceMotionData && __GetCurrentMotionIndex() == CRaceMotionData::NAME_DIG;
+}
+
 BOOL CActorInstance::CanCancelSkill()
 {
 	assert(IsUsingSkill());

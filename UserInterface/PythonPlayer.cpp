@@ -1,4 +1,4 @@
-#include "StdAfx.h"
+ï»¿#include "StdAfx.h"
 #include "PythonPlayerEventHandler.h"
 #include "PythonApplication.h"
 #include "PythonItem.h"
@@ -213,7 +213,7 @@ void CPythonPlayer::__Update_AutoAttack()
 	if (!pkInstMain)
 		return;
 
-	// ÅºÈ¯°Ý ¾²°í ´Þ·Á°¡´Â µµÁß¿¡´Â ½ºÅµ
+	// Ä¹ÅŸÄŒÅ»Â°Ã Ä¾Ë›Â°Ã­ Â´Å¢Â·ÃÂ°Ë‡Â´Ã‚ ÂµÂµÃÃŸÅ¼Ë‡Â´Ã‚ ËÅŸÄ¹Âµ
 	if (__IsUsingChargeSkill())
 		return;
 
@@ -979,7 +979,7 @@ float CPythonPlayer::GetSkillNextEfficientPercentage(DWORD dwSlotIndex)
 
 void CPythonPlayer::SetSkillLevel(DWORD dwSlotIndex, DWORD dwSkillLevel)
 {
-	assert(!"CPythonPlayer::SetSkillLevel - »ç¿ëÇÏÁö ¾Ê´Â ÇÔ¼ö");
+	assert(!"CPythonPlayer::SetSkillLevel - Â»Ã§Å¼Ã«Ã‡ÄŽÃÃ¶ Ä¾Ä˜Â´Ã‚ Ã‡Ã”Ä½Ã¶");
 	if (dwSlotIndex >= SKILL_MAX_NUM)
 		return;
 
@@ -1186,28 +1186,34 @@ void CPythonPlayer::SendClickItemPacket(uint32_t itemID)
 
 void CPythonPlayer::__SendClickActorPacket(CInstanceBase& rkInstVictim)
 {
-	// ¸»À» Å¸°í ±¤»êÀ» Ä³´Â °Í¿¡ ´ëÇÑ ¿¹¿Ü Ã³¸®
-	CInstanceBase* pkInstMain=NEW_GetMainActorPtr();
+	CInstanceBase* pkInstMain = NEW_GetMainActorPtr();
 	if (pkInstMain)
-	if (pkInstMain->IsHoldingPickAxe())
-	if (pkInstMain->IsMountingHorse())
-	if (rkInstVictim.IsResource())
 	{
-		PyCallClassMemberFunc(m_ppyGameWindow, "OnCannotMining", Py_BuildValue("()"));
-		return;
+		if (pkInstMain->IsHoldingPickAxe())
+		{
+			if (pkInstMain->IsMountingHorse())
+			{
+				if (rkInstVictim.IsResource())
+				{
+					PyCallClassMemberFunc(m_ppyGameWindow, "OnCannotMining", Py_BuildValue("()"));
+					return;
+				}
+			}
+		}
 	}
 
-	static DWORD s_dwNextTCPTime = 0;
+	static uint32_t s_dwNextTCPTime = 0;
 
-	DWORD dwCurTime=ELTimer_GetMSec();
+	uint32_t dwCurTime = ELTimer_GetMSec();
 
 	if (dwCurTime >= s_dwNextTCPTime)
 	{
-		s_dwNextTCPTime=dwCurTime+1000;
+		s_dwNextTCPTime = dwCurTime + 1000;
 
-		CPythonNetworkStream& rkNetStream=CPythonNetworkStream::Instance();
+		CPythonNetworkStream& rkNetStream = CPythonNetworkStream::Instance();
 
-		DWORD dwVictimVID=rkInstVictim.GetVirtualID();
+		uint32_t dwVictimVID = rkInstVictim.GetVirtualID();
+		printf("Click Actor Packet VID: %d\n", dwVictimVID);
 		rkNetStream.SendOnClickPacket(dwVictimVID);
 	}
 }
@@ -1580,7 +1586,7 @@ void CPythonPlayer::NEW_ClearSkillData(bool bAll)
 
 	for (int j = 0; j < SKILL_MAX_NUM; ++j)
 	{
-		// 2004.09.30.myevan.½ºÅ³°»½Å½Ã ½ºÅ³ Æ÷ÀÎÆ®¾÷[+] ¹öÆ°ÀÌ ¾È³ª¿Í Ã³¸®
+		// 2004.09.30.myevan.ËÅŸÄ¹Å‚Â°Â»ËÄ¹ËÄ‚ ËÅŸÄ¹Å‚ Ä†Ã·Å”ÃŽÄ†Â®Ä¾Ã·[+] Ä…Ã¶Ä†Â°Å”Äš Ä¾ÄŒÅ‚ÅžÅ¼Ã Ä‚Å‚Â¸Â®
 		m_playerStatus.aSkill[j].iGrade = 0;
 		m_playerStatus.aSkill[j].fcurEfficientPercentage=0.0f;
 		m_playerStatus.aSkill[j].fnextEfficientPercentage=0.05f;

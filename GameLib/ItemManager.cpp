@@ -42,22 +42,17 @@ BOOL CItemManager::SelectItemData(DWORD dwIndex)
 CItemData * CItemManager::GetSelectedItemDataPointer()
 {
 	return m_pSelectedItemData;
-	printf("CItemManager::m_pSelectedItemData %d", m_pSelectedItemData);
 }
 
 BOOL CItemManager::GetItemDataPointer(DWORD dwItemID, CItemData ** ppItemData)
 {
-	printf("CItemManager::GetItemDataPointer - Called with dwItemID: %d\n", dwItemID);
 
 	if (0 == dwItemID)
 	{
-		printf("CItemManager::GetItemDataPointer - dwItemID is 0, returning FALSE\n");
 		return FALSE;
 	}
 
 	TItemMap::iterator f = m_ItemMap.find(dwItemID);
-	printf("CItemManager::GetItemDataPointer - dwItemID not found in m_ItemMap, checking m_vec_ItemRange\n");
-
 
 	if (m_ItemMap.end() == f)
 	{
@@ -67,23 +62,17 @@ BOOL CItemManager::GetItemDataPointer(DWORD dwItemID, CItemData ** ppItemData)
 			CItemData * p = m_vec_ItemRange[i];
 			const CItemData::TItemTable * pTable = p->GetTable(); 
 
-			printf(" Checking item range at index %d: vnum %d, range %d\n", i, pTable->dwVnum, pTable->dwVnumRange);
-
 			if ((pTable->dwVnum < dwItemID) &&
 				dwItemID < (pTable->dwVnum + pTable->dwVnumRange))
 			{
 				*ppItemData = p;
-				printf(" CItemManager::GetItemDataPointer - Found item in range, returning TRUE\n");
 				return TRUE;
 			}
 		}
-		printf(" CItemManager::GetItemDataPointer - FIND ERROR [%d]\n", dwItemID);
 		return FALSE;
 	}
 
 	*ppItemData = f->second;
-	printf(" CItemManager::GetItemDataPointer - Found item in m_ItemMap, returning TRUE\n");
-
 
 	return TRUE;
 }

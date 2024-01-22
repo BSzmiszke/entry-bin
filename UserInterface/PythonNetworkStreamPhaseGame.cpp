@@ -1705,8 +1705,8 @@ bool CPythonNetworkStream::SendCharacterPositionPacket(BYTE iPosition)
 bool CPythonNetworkStream::SendOnClickPacket(DWORD vid)
 {
 	TPacketCGOnClick OnClickPacket;
-	OnClickPacket.header	= HEADER_CG_ON_CLICK;
-	OnClickPacket.vid		= vid;
+	OnClickPacket.header = HEADER_CG_ON_CLICK;
+	OnClickPacket.vid = vid;
 
 	if (!Send(sizeof(OnClickPacket), &OnClickPacket))
 	{
@@ -1750,6 +1750,8 @@ bool CPythonNetworkStream::RecvMotionPacket()
 
 	if (!pMainInstance)
 		return false;
+
+	pMainInstance->PushOnceMotion(MotionPacket.motion);
 
 	return true;
 }
@@ -4569,19 +4571,24 @@ bool CPythonNetworkStream::RecvDigMotionPacket()
 
 #ifdef _DEBUG
 	Tracef(" Dig Motion [%d/%d]\n", kDigMotion.vid, kDigMotion.count);
+	Tracef(" Target VID: %d\n", kDigMotion.target_vid);
 #endif
 
-	IAbstractCharacterManager& rkChrMgr=IAbstractCharacterManager::GetSingleton();
-	CInstanceBase * pkInstMain = rkChrMgr.GetInstancePtr(kDigMotion.vid);
-	CInstanceBase * pkInstTarget = rkChrMgr.GetInstancePtr(kDigMotion.target_vid);
-	if (NULL == pkInstMain)
+	IAbstractCharacterManager& rkChrMgr = IAbstractCharacterManager::GetSingleton();
+	CInstanceBase* pkInstMain = rkChrMgr.GetInstancePtr(kDigMotion.vid);
+	CInstanceBase* pkInstTarget = rkChrMgr.GetInstancePtr(kDigMotion.target_vid);
+	if (!pkInstMain || !pkInstTarget)
 		return true;
 
-	if (pkInstTarget)
-		pkInstMain->NEW_LookAtDestInstance(*pkInstTarget);
+	// Look their way
+	pkInstMain->NEW_LookAtDestInstance(*pkInstTarget);
 
-	for (int i = 0; i < kDigMotion.count; ++i)
+	// Run the motion(s)
+	for (int32_t i = 0; i < kDigMotion.count; ++i)
 		pkInstMain->PushOnceMotion(CRaceMotionData::NAME_DIG);
+
+	// Start the mining!
+	pkInstMain->StartMining(kDigMotion.target_vid);
 
 	return true;
 }

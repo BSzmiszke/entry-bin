@@ -1133,6 +1133,14 @@ class CInstanceBase
 		void MobInfoLevelRefresh();
 	#endif
 #endif
+
+	protected:
+		uint32_t m_dwMiningVID;
+
+	public:
+		bool IsMiningVID(uint32_t vid);
+		void StartMining(uint32_t vid);
+		void CancelMining();
 };
 
 inline int RaceToJob(int race)
